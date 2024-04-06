@@ -9,6 +9,6 @@ bash Automation.sh
 ```
 
 #### Importing the VM
-![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/6727fbe0-6714-4543-a39f-fc845baae344)
 
 #### Exporting the VM
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/6727fbe0-6714-4543-a39f-fc845baae344)
