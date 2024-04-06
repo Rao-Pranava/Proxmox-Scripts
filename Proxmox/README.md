@@ -1,5 +1,5 @@
 # Proxmox
-This repositry automates the process of exporting and importing Virtual machine Disk files
+This file automates the process of exporting and importing Virtual machine Disk files
 
 # Useage
 
