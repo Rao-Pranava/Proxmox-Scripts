@@ -5,37 +5,6 @@ Import=0
 
 # Defining funtions
 
-# main function
-main() {
-
-    slow_type  "What would you like to do?"
-    read -p "" action
-    
-    if [[ "$action" == "Import" || "$action" == "import" ]]; then
-        
-        slow_type "Importing a virtual machine files..."
-    
-        import_vm
-    
-    elif [[ "$action" == "Export" || "$action" == "export" ]]; then
-    
-        slow_type "Exporting a virtual machine files..."
-    
-        Export_vm
-    
-    elif [[ "$action" == "Create VM" || "$action" == "create" || "$action" == "create vm" ]]; then
-    
-        slow_type "Creating a new virtual machine..."
-                    
-        create_vm
-    
-    else
-    
-        slow_type "Invalid option selected. You have the following options: Import, Export, Create VM"
-    
-    fi
-}
-
 # Fuction to slow type
 slow_type() {
     local text="$1"
@@ -306,8 +275,263 @@ Export_vm() {
 
 }
 
-slow_type "Welcome! I am a program built by Pranava Rao for managing your Virtual Machines."
+# Parse command line arguments
+parse_arguments() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --export)
+                action="export"
+                shift
+                ;;
+            --import)
+                action="import"
+                shift
+                ;;
+            --create)
+                action="create"
+                shift
+                ;;
+            --name)
+                VM_name=$2
+                shift 2
+                ;;
+            --format)
+                F1=$2
+                shift 2
+                ;;
+            --iformat)
+                F2=$2
+                shift 2
+                ;;
+            --source)
+                IP=$2
+                shift 2
+                ;;
+            --RAM)
+                CRAM=$2
+                shift 2
+                ;;
+            --ID)
+                vmid=$2
+                shift 2
+                ;;
+            --OS)
+                COS=$2
+                shift 2
+                ;;
+            *)
+                echo "Invalid option: $1"
+                exit 1
+                ;;
+        esac
+    done
+}
 
-cat .Banner
+# Main function
+main() {
+    slow_type "Welcome! I am a program built by Pranava Rao for managing your Virtual Machines."
 
-main
+    cat .Banner
+
+    # Parse command line arguments
+    parse_arguments "$@"
+
+    # If no arguments provided, prompt the user for action
+    if [[ $# -eq 0 ]]; then
+        interactive_menu
+    else
+        perform_action
+    fi
+}
+
+# Function for interactive menu
+interactive_menu() {
+    slow_type "What would you like to do?"
+    read -p "" action
+    
+    case $action in
+        "Import" | "import")
+            Import_vm
+            ;;
+        "Export" | "export")
+            Export_vm
+            ;;
+        "Create VM" | "create" | "create vm")
+            create_vm
+            ;;
+        *)
+            slow_type "Invalid option selected. You have the following options: Import, Export, Create VM"
+            ;;
+    esac
+}
+
+PExport_vm() {
+
+    supported_formats="alloc-track backup-dump-drive blkdebug blklogwrites blkverify bochs cloop compress copy-before-write copy-on-read dmg file ftp ftps gluster host_cdrom host_device http https iscsi iser luks nbd null-aio null-co nvme parallels pbs preallocate qcow qcow2 qed quorum raw rbd replication snapshot-access throttle vdi vhdx vmdk vpc vvfat zeroinit"
+
+    if ! echo "$supported_formats" | grep -qw "$F1"; then
+        slow_type "Unsupported format. Please choose from the following supported formats:"
+        echo "$supported_formats"
+        exit 1
+    fi
+
+    VMID1=$(qm list | grep -i "$VM_name" | awk '{print $1}')
+    qm stop $VMID1
+
+    loc=$"local":$VMID1
+
+    # Find the disk information and store it in a variable
+    disk_info=$(qm config $VMID1 | grep $loc)
+    
+    # Extract disk names dynamically
+    disk_names=$(echo "$disk_info" | awk -F ': ' '{print $1}')
+    
+    # Count the number of disks
+    disk_count=$(echo "$disk_names" | wc -l)
+
+    # If there's only one disk, extract its name directly
+    if [ "$disk_count" -eq 1 ]; then
+        disk_name=$(echo "$disk_names")
+    else
+        # Print the disk information and prompt the user to select a disk
+        slow_type "Multiple disks found for the virtual machine."
+        slow_type "Please select the disk you want to export:"
+        echo "$disk_names"
+        read -p "Enter the disk name: " selected_disk
+    
+        # Validate user input
+        while ! echo "$disk_names" | grep -qw "$selected_disk"; do
+            slow_type "Invalid disk name. Please select from the following:"
+            echo "$disk_names"
+            read -p "Enter the disk name: " selected_disk
+        done
+    
+        disk_name=$selected_disk
+    fi
+
+    VMDiskname=$(qm config $VMID1 | grep $disk_name: | awk '{print $3}' FS=: OFS=, | cut -d, -f1)
+    Path="local:$VMDiskname"
+    DiskPath=$(pvesm path $Path)
+    VMF1=$(echo "$VMDiskname" | awk -F'.' '{print $2}')
+
+    qemu-img convert -f "$VMF1" -O $F1 "$DiskPath" "./$VM_name.$F1"
+
+    slow_type "Starting the Virtual Machine..."
+    qm start $VMID1
+
+    slow_type "Your file that you wanted to be Exported:"
+    ls -lh | grep -i "$VM_name"
+    pwd
+
+}
+
+PImport_vm() {
+
+    TEMP_FOLDER="TEMP"
+    mkdir -p $TEMP_FOLDER
+    cd $TEMP_FOLDER || exit
+
+    # Download the file
+    if ! wget "http://$IP/$VM_name.$F2"; then
+        
+        slow_type "Failed to download the file."
+        
+        exit 1
+    fi
+
+    # Check if the file is already in vmdk format
+    if [ "${F2,,}" != "vmdk" ]; then
+        
+        if ! qemu-img convert -f "$F2" -O vmdk "./$VM_name.$F2" "./$VM_name.vmdk"; then
+            slow_type "Failed to convert the file to VMDK format."
+            exit 1
+        fi
+    fi
+
+    # Find VM's ID using qm list and grep
+    VMID=$(qm list | grep -i "$VM_name" | awk '{print $1}')
+
+    if ! qm importdisk $VMID "./$VM_name.vmdk" local --format vmdk; then
+        slow_type "Failed to import the disk."
+        exit 1
+    fi
+
+    slow_type "Enter the disk number displayed above (look at: unused0:local:105/vm-105-disk-0.vmdk and menstion the number after 'disk')"
+    read -p "" Dnum
+
+    disks=$(find / -name "vm-$VMID-disk-*" 2>/dev/null | grep $VMID)
+
+    if echo "$disks" | grep -q "disk-$Dnum"; then
+        attach_disk $VMID $Dnum
+        echo "Disk attached successfully to VM $VMID"
+    else
+        echo "Invalid disk number. Please enter a valid disk number."
+    fi
+
+    qm set $VMID --boot="order=sata0"
+
+    # Cleanup: Delete the TEMP folder
+    cd ..
+    rm -rf "$TEMP_FOLDER"
+
+    slow_type "Import process completed successfully!"
+
+    qm start $VMID
+    
+    slow_type "Your Virtual machine is powered on"
+
+}
+
+Pcreate_vm() {
+
+    local ram_mb=$(echo "$CRAM" | sed 's/[^0-9]*//g')
+    local os_type
+    
+    case "$COS" in
+        Linux)
+            os_type=l26
+            ;;
+        "Windows 10")
+            os_type=win10
+            ;;
+        "Windows 11")
+            os_type=win11
+            ;;
+        "Windows 7" | "Windows 8" | "Windows Vista" | "Windows XP")
+            os_type="win$(echo "$COS" | tr '[:upper:]' '[:lower:]' | sed 's/windows //')"
+            ;;
+        *)
+            slow_type "Unsupported OS type. Please choose Linux or Windows 10/11/7/8/Vista/XP."
+            exit 1
+            ;;
+    esac
+
+    slow_type "Creating a new virtual machine with the following configuration:"
+    echo "Name: $VM_name; VMID: $vmid; RAM: $ram_mb; OS: $os_type"
+
+    qm create $vmid --name "$VM_name" --net0 model=virtio,bridge=vmbr0,firewall=1 --memory "$ram_mb" --ostype "$os_type" --storage local
+    
+    slow_type "New virtual machine created successfully"
+
+}
+
+# Function to perform the action based on the provided options
+perform_action() {
+    case $action in
+        export)
+            PExport_vm
+            ;;
+        import)
+            PImport_vm
+            ;;
+        create)
+            Pcreate_vm
+            ;;
+        *)
+            echo "Invalid action. Please choose --export, --import, or --create"
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
