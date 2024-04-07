@@ -1,5 +1,6 @@
 # Automation-Scripts
 This repositry is a collection of all the scripts that is used for automating stuffs
+
 ![AI Images](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/a3c8a0c6-2795-4953-af57-44e558460204)
 
 
