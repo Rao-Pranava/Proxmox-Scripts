@@ -358,7 +358,7 @@ main() {
 
     # Check if --help is provided
     if [[ "$1" == "--help" ]]; then
-        display_help()
+        display_help
         exit 0
     fi
 
