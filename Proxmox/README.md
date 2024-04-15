@@ -20,9 +20,17 @@ bash Automation.sh
 
 ### Automated mood.
 
+#### Help
+
+```
+bash Proxmox.sh --help
+```
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/84d7dd85-e6b8-419f-88c6-feeae5cff803)
+
 #### Exporting the VM
 
 ```
 bash Proxmox.sh --export --name <name> --format <format>
 ```
 ![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/77003e79-1875-46d0-8e23-e3a9999798b5)
+
