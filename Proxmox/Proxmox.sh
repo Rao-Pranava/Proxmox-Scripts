@@ -327,11 +327,40 @@ parse_arguments() {
     done
 }
 
+# Add a function to display help information
+display_help() {
+    echo "Usage: Proxmox.sh [OPTION]..."
+    echo "Manage your Proxmox server with this script."
+    echo
+    echo "Available options:"
+    echo "  --help                 Display this help information"
+    echo "  --export               Export a virtual machine"
+    echo "  --import               Import a virtual machine"
+    echo "  --create               Create a new virtual machine"
+    echo "  --name NAME            Specify the virtual machine name"
+    echo "  --format FORMAT        Specify the export file format (e.g., vmdk, qcow2, raw)"
+    echo "  --source IP            Specify the source IP for importing a virtual machine"
+    echo "  --RAM RAM              Specify the amount of RAM for a new virtual machine"
+    echo "  --ID VMID              Specify the virtual machine ID"
+    echo "  --OS OS                Specify the operating system type for a new virtual machine (Linux, Windows 10/11/7/8/Vista/XP)"
+    echo
+    echo "Examples:"
+    echo "  $bash Proxmox.sh --import --source 192.168.1.100 --name myVM --format vmdk"
+    echo "  $bash Proxmox.sh --export --name myVM --format qcow2"
+    echo "  $bash Proxmox.sh --create --name newVM --OS Linux --RAM 2048"
+}
+
 # Main function
 main() {
     slow_type "Welcome! I am a program built by Pranava Rao for managing your Virtual Machines."
 
     cat .Banner
+
+    # Check if --help is provided
+    if [[ "$1" == "--help" ]]; then
+        display_help()
+        exit 0
+    fi
 
     # Parse command line arguments
     parse_arguments "$@"
