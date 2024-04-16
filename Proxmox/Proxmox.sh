@@ -347,7 +347,7 @@ display_help() {
     echo "Examples:"
     echo "  $bash Proxmox.sh --import --source 192.168.1.100 --name myVM --format vmdk"
     echo "  $bash Proxmox.sh --export --name myVM --format qcow2"
-    echo "  $bash Proxmox.sh --create --name newVM --OS Linux --RAM 2048"
+    echo "  $bash Proxmox.sh --create --name newVM --OS Linux --RAM 2048 --ID 123"
 }
 
 # Main function
