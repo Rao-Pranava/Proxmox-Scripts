@@ -299,10 +299,6 @@ parse_arguments() {
                 F1=$2
                 shift 2
                 ;;
-            --iformat)
-                F2=$2
-                shift 2
-                ;;
             --source)
                 IP=$2
                 shift 2
@@ -461,7 +457,7 @@ PImport_vm() {
     cd $TEMP_FOLDER || exit
 
     # Download the file
-    if ! wget "http://$IP/$VM_name.$F2"; then
+    if ! wget "http://$IP/$VM_name.$F1"; then
         
         slow_type "Failed to download the file."
         
@@ -469,9 +465,9 @@ PImport_vm() {
     fi
 
     # Check if the file is already in vmdk format
-    if [ "${F2,,}" != "vmdk" ]; then
+    if [ "${F1,,}" != "vmdk" ]; then
         
-        if ! qemu-img convert -f "$F2" -O vmdk "./$VM_name.$F2" "./$VM_name.vmdk"; then
+        if ! qemu-img convert -f "$F1" -O vmdk "./$VM_name.$F1" "./$VM_name.vmdk"; then
             slow_type "Failed to convert the file to VMDK format."
             exit 1
         fi
