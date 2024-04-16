@@ -16,6 +16,7 @@ bash Automation.sh
 ![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/2e971203-7f3d-40fd-a204-ccb40fb40ef2)
 
 #### Create a VM
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/6c2a996f-4b8b-476f-a68f-a159eacc022f)
 
 
 ### Automated mood.
@@ -32,6 +33,10 @@ bash Proxmox.sh --help
 ```
 bash Proxmox.sh --import --source <IP-Address> --name <name> --format <format>
 ```
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/8eb5b7c0-f1f8-4487-907b-2e7c0266b10c)
+
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/ee3a977c-4b6d-4202-be6f-fa7a496f2588)
+
 
 #### Exporting the VM
 
