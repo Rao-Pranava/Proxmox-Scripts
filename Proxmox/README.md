@@ -27,7 +27,7 @@ bash Proxmox.sh --help
 ```
 ![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/afb2e504-fb03-4815-b8a5-e3ee7e5b78ad)
 
-#### Impoaring a VM
+#### Importing a VM
 
 ```
 bash Proxmox.sh --import --source <IP-Address> --name <name> --format <format>
