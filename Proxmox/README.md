@@ -25,7 +25,8 @@ bash Automation.sh
 ```
 bash Proxmox.sh --help
 ```
-![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/84d7dd85-e6b8-419f-88c6-feeae5cff803)
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/afb2e504-fb03-4815-b8a5-e3ee7e5b78ad)
+
 
 #### Exporting the VM
 
@@ -34,3 +35,9 @@ bash Proxmox.sh --export --name <name> --format <format>
 ```
 ![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/77003e79-1875-46d0-8e23-e3a9999798b5)
 
+#### Creating a VM
+
+```
+bash Proxmox.sh --create --name <name> --OS <OS> --RAM 2048 --ID <ID>
+```
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/76a055f8-7a48-4b06-8c64-a804335849e4)
