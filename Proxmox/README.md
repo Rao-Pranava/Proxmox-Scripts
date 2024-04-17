@@ -11,6 +11,9 @@ bash Automation.sh
 ```
 
 #### Importing the VM
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/5ae6ea7b-d2cd-4685-9c75-94ef9f722167)
+
+![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/ee3a977c-4b6d-4202-be6f-fa7a496f2588)
 
 #### Exporting the VM
 ![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/2e971203-7f3d-40fd-a204-ccb40fb40ef2)
