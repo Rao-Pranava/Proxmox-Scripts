@@ -1,7 +1,6 @@
 # Apache2
 
-This code is for automating the process of installing apache2, mysql and PHP on a Ubuntu server.
-
+This code is for automated script to download and install **Apache2**, **MySQL** along with **PHP** on a **Ubuntu System** (only tested on a Ubuntu Server as of now)
 ## Useage
 
 ```
