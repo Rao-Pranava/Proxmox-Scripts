@@ -83,5 +83,5 @@ sudo nano /etc/crontab
 And add the following line
 
 ```
-* * * * * /path/to/Kill-Switch.sh
+* * * * * root /path/to/Kill-Switch.sh
 ```
