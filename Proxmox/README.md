@@ -67,15 +67,15 @@ This automated scripts shuts down the Proxmox server as well as the Virtual Mach
 
 1. Add the IP Address of the Server that you want to PING as a server that would not respond when the power is off.
 
+![image](https://github.com/user-attachments/assets/5607a97e-94a8-4475-8616-86061490aa67)
 
-
-3. Make file executable.
+2. Make file executable.
 
 ```
 chmod +x Kill-Switch.sh
 ```
 
-2. Add a cronjob to run this bash script at all time.
+3. Add a cronjob to run this bash script at all time.
 
 ```
 sudo nano /etc/crontab
