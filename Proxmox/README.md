@@ -2,6 +2,10 @@
 
 All these scripts are to be run on the Proxmox Server
 
+```
+git clone https://github.com/Rao-Pranava/Automation-Scripts.git
+```
+
 ## Proxmox.sh
 This file automates the process of exporting and importing Virtual machine Disk files
 
@@ -59,7 +63,7 @@ bash Proxmox.sh --create --name <name> --OS <OS> --RAM 2048 --ID <ID>
 ```
 ![image](https://github.com/Rao-Pranava/Automation-Scripts/assets/93928268/76a055f8-7a48-4b06-8c64-a804335849e4)
 
-## Kill-Switch.sh
+## Kill-Switch1.sh
 
 This automated scripts shuts down the Proxmox server as well as the Virtual Machine after it identifies a power out age using a Ping mechanism of another system (Ping Server) which responds to the Ping messages when the power is alive and then goes black out when the power is cut.
 
@@ -72,7 +76,7 @@ This automated scripts shuts down the Proxmox server as well as the Virtual Mach
 2. Make file executable.
 
 ```
-chmod +x Kill-Switch.sh
+chmod +x Kill-Switch1.sh
 ```
 
 3. Add a cronjob to run this bash script at all time.
@@ -83,5 +87,53 @@ sudo nano /etc/crontab
 And add the following line
 
 ```
-* * * * * root /path/to/Kill-Switch.sh
+* * * * * root /path/to/Kill-Switch1.sh
+```
+
+## Kill-Switch2.sh
+
+This automated scripts shuts down the Proxmox server as well as the Virtual Machine after it identifies a power loss using the `upower` tool. This meastures battery power and when it reaches 30% or below, it power off the server.
+
+### Setup
+
+1. Install  `upower`.
+
+```
+apt install upower
+```
+
+![image](https://github.com/user-attachments/assets/c760d464-5396-4110-af75-1833684f7eed)
+
+2. using the `upower` find the location of your battery and edit the location of the battery in the script.
+
+```
+upower -e
+```
+
+![image](https://github.com/user-attachments/assets/8d7e1d4f-acdb-4df2-a68e-aaf5d8a8b4a9)
+
+```
+/org/freedesktop/UPower/devices/battery_BAT1 #Your Battery Location
+```
+
+![image](https://github.com/user-attachments/assets/c11bd24a-071f-43af-88e0-3de1df6ced2c)
+
+Then save and exit.
+
+
+3. Make file executable.
+
+```
+chmod +x Kill-Switch2.sh
+```
+
+3. Add a cronjob to run this bash script at all time.
+
+```
+sudo nano /etc/crontab
+```
+And add the following line
+
+```
+* * * * * root /path/to/Kill-Switch2.sh
 ```
