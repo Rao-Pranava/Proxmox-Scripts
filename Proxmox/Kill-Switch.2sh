@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Set the battery threshold (in percentage) for shutdown
+BATTERY_THRESHOLD=30 # You can also change the battery's minimum threshold
+
+# Path to the log directory and log file
+LOG_DIR="/home/Logs"
+LOG_FILE="$LOG_DIR/battery_monitor.log"
+
+# Ensure the log directory exists
+mkdir -p $LOG_DIR
+
+# Function to log messages with a timestamp
+log_message() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a $LOG_FILE
+}
+
+# Function to get the current battery level
+get_battery_level() {
+    upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "percentage" | awk '{print $2}' | sed 's/%//' # Enter your Battery's location
+}
+
+# Function to shutdown VMs and the server
+shutdown_vms_and_server() {
+    log_message "Battery below $BATTERY_THRESHOLD%. Shutting down VMs and the Proxmox server..."
+    
+    # Stop all running VMs
+    for vmid in $(/usr/sbin/qm list | awk '{if(NR>1) print $1}'); do
+        log_message "Shutting down VM ID: $vmid"
+        /usr/sbin/qm shutdown $vmid
+        sleep 5  # Give some time for the VM to shutdown gracefully
+    done
+    
+    # Shutdown the Proxmox server
+    log_message "Shutting down the Proxmox server..."
+    /sbin/shutdown -h now
+}
+
+# Main script
+while true; do
+    battery_level=$(get_battery_level)
+    
+    if [ "$battery_level" -le "$BATTERY_THRESHOLD" ]; then
+        shutdown_vms_and_server
+        break
+    fi
+    
+    sleep 60  # Check every minute
+done
