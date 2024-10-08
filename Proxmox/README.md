@@ -137,3 +137,10 @@ And add the following line
 ```
 * * * * * root /path/to/Kill-Switch2.sh
 ```
+
+# Useful Commands
+
+If you want to download the file from your server to the local computer, you can use this command:
+```
+scp root@<IP Address>:<File Location> .
+```
