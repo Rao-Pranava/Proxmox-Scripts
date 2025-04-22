@@ -138,6 +138,46 @@ And add the following line
 * * * * * root /path/to/Kill-Switch2.sh
 ```
 
+## export_all_vms.sh
+This script is a part of automating the process of backing up all the power offed systems in your Proxmox Server.
+
+You can find the Detailed Blog about reasons and Motives about this tool [Here](https://pranavarao.tech)
+
+### Setup
+
+1. Make the `export_all_vms.sh` script executable
+
+```
+chmod +x export_all_vms.sh
+```
+
+2. Add the followign cron job to the cron of your proxmox server.
+
+```
+crontab -e
+```
+
+Enter the following content:
+
+```
+5 0 * * 0 /home/export_all_vms.sh >> /var/log/vm_backup.log 2>&1
+```
+*This will run the `export_all_vms.sh` script at 00:05 hours on all Sundays*
+
+![image](https://github.com/user-attachments/assets/4e21a58a-8b47-443a-9b9d-8f61aa11e9d0)
+
+Now, exit the editor
+
+3. That is it, if you want to have a test run, you can run the following command
+
+```
+./export_all_vms.sh
+```
+
+![image](https://github.com/user-attachments/assets/a37766a2-7680-4454-b020-99e4244feebc)
+
+-----------------
+
 # Useful Commands
 
 If you want to download the file from your server to the local computer, you can use this command:
