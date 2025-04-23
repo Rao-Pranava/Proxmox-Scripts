@@ -20,7 +20,7 @@ echo "$POWERED_OFF_VMS" | while read -r VM_NAME; do
     echo "Backing up: $VM_NAME"
 
     # Run the Proxmox.sh export
-    bash /home/Proxmox.sh --export --name "$VM_NAME" --format qcow2
+    bash ./Proxmox.sh --export --name "$VM_NAME" --format qcow2
 
     # Wait until the file is available and stable
     while true; do
