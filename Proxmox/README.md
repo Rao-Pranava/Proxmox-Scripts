@@ -141,7 +141,7 @@ And add the following line
 ## export_all_vms.sh
 This script is a part of automating the process of backing up all the power offed systems in your Proxmox Server.
 
-You can find the Detailed Blog about reasons and Motives about this tool [Here](https://pranavarao.tech)
+You can find the Detailed Blog about reasons and Motives about this tool [Here]([https://pranavarao.tech](https://pranavarao.tech/Blogs/Tech/backing-up-virtual-machines-in-promox/index.html))
 
 ### Setup
 
