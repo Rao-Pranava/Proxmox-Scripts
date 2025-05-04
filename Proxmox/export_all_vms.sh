@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH=/usr/sbin:/usr/bin:/bin
 
 # Timestamp and backup dir
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M")
@@ -8,7 +9,7 @@ mkdir -p "$BACKUP_DIR"
 cd /home || exit 1
 
 # Get list of powered-off VMs
-POWERED_OFF_VMS=$(qm list | awk '$3 == "stopped" {print $2}')
+POWERED_OFF_VMS=$(/usr/sbin/qm list | awk '$3 == "stopped" {print $2}')
 
 if [ -z "$POWERED_OFF_VMS" ]; then
     echo "No VMs are powered off. Nothing to backup."
