@@ -5,7 +5,7 @@
 All these scripts are to be run on the Proxmox Server
 
 ```
-git clone https://github.com/Rao-Pranava/Automation-Scripts.git
+git clone https://github.com/Rao-Pranava/Proxmox-Scripts.git
 ```
 
 ## Proxmox.sh
