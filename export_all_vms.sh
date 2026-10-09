@@ -30,12 +30,11 @@ for VMID in $POWERED_OFF_VMIDS; do
     bash /home/Proxmox.sh \
         --export \
         --ID "$VMID" \
-        --format qcow2 \
         --disk all
 
     # Wait until all export files are available and unlocked
     while true; do
-        FILES=$(ls /home/${VM_NAME}_*.qcow2 2>/dev/null)
+        FILES=$(ls /home/${VM_NAME}_* 2>/dev/null)
 
         if [ -n "$FILES" ]; then
             BUSY=0
@@ -52,7 +51,7 @@ for VMID in $POWERED_OFF_VMIDS; do
     done
 
     # Move all exported disks for this VM
-    mv /home/${VM_NAME}_*.qcow2 "$BACKUP_DIR/"
+    mv /home/${VM_NAME}_* "$BACKUP_DIR/"
     echo "✅ Backup complete: VMID=$VMID ($VM_NAME)"
 
 done
